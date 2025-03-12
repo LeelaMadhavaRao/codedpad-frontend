@@ -8,10 +8,10 @@ export function Create() {
     const [code, setCode] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
-    const nav=useNavigate();
+    const nav = useNavigate();
 
     const checkMe = async (e) => {
-        e.preventDefault(); // Prevent form submission default behavior
+        e.preventDefault();
         
         if (code === "") {
             alert('please enter a code');

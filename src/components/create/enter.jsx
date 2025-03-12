@@ -4,8 +4,8 @@ import { api } from '../api';
 import '../../css/create.css';
 import { useNavigate } from 'react-router-dom';
 
-export function OpenMe() {
-    const [code, setCode] = useState("");
+export function OpenMe() { 
+    const [code, setCode] = useState(""); 
     const [data, setData] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -23,13 +23,14 @@ export function OpenMe() {
         setError(null);
 
         try {
-            const res = await axios.post(api + '/Open', { code: code });
+            const res = await axios.post(api + '/Open', {code: code }); 
             if (!res.data.success) {
                 alert('code doesn\'t exist');
                 nav('/create'); 
             } else {
                 setData(res.data);
-                nav('/show'); 
+                
+                nav('/show', { state: { code: code } }); 
             }
         } catch (e) {
             console.log(e);
@@ -42,7 +43,7 @@ export function OpenMe() {
     return (
         <div className='outer'>
             <h2>Enter your unique code to Open your space</h2>
-            <form onSubmit={openMe}> {/* Changed from checkMe to openMe */}
+            <form onSubmit={openMe}>
                 <div className='inner'>
                     <input 
                         type='text' 
