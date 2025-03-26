@@ -1,1 +1,1 @@
-export const api="http://localhost:9000"
+export const api="https://codedpad-backend.vercel.app"
