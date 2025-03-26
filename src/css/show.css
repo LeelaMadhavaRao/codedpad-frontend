@@ -6,7 +6,7 @@
 }
 
 .main {
-    background-image: url(../../public/istockphoto-865457032-612x612.jpg);
+    background-image: url('../../public/image.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
