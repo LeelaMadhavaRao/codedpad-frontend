@@ -6,7 +6,7 @@
 }
 
 .main {
-    background-image: url('../../public/image.png');
+    background-image: url('../../public/istockphoto-865457032-612x612.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -19,20 +19,18 @@
 
 .show-container {
     background-color: skyblue;
-    width: 60%;
-    height: 70%;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     position: relative;
     padding: 20px;
-    box-sizing: border-box;
     color: #00ff00;
     font-family: 'Courier New', Courier, monospace;
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /* Ensure space between title, data, and input */
-    min-height: 100%; /* Ensure container uses full height */
+    justify-content: space-between;
+    height:600px ;
+    
 }
 
 .show-title {
@@ -41,7 +39,6 @@
     left: 0;
     right: 0;
     margin: 20px auto;
-    width: calc(100% - 40px);
     max-width: 600px;
     font-size: 2em;
     text-align: center;
@@ -49,23 +46,22 @@
     background: rgba(0, 0, 0, 0.7);
     padding: 10px;
     border-radius: 4px;
-    z-index: 1; /* Ensure title stays above other content */
+    z-index: 1;
 }
 
 .show-data-container {
     flex-grow: 1;
-    margin-top: 80px; /* Space below title */
+    margin-top: 80px;
     overflow-y: auto;
     width: 100%;
     padding: 10px 0;
-    margin-bottom: 20px; /* Add bottom margin to prevent overlap with input area */
+    margin-bottom: 20px;
 }
 
 .show-data-list {
     list-style: none;
     padding: 0;
     width: 100%;
-    height: 250px;
     max-width: 600px;
     margin: 0 auto;
 }
@@ -79,10 +75,12 @@
     transition: transform 0.2s;
     font-weight: 700;
     overflow: hidden;
+    display: flex;
+    justify-content: space-between;
 }
 
 .show-data-item:hover {
-    transform: scale(1.02);
+   
     border-color: #111;
     color: #111;
     font-weight: bolder;
@@ -130,8 +128,9 @@
     border: 1px solid #00ff00;
     border-radius: 4px;
     padding: 20px;
-    margin-bottom: 20px; /* Ensure space at the bottom */
-    margin-left: 55px;
+    margin-bottom: 20px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .show-textarea {
@@ -155,7 +154,6 @@
     font-family: 'Courier New', Courier, monospace;
     transition: background-color 0.3s;
     width: 100%;
-    max-width: 600px;
 }
 
 .show-append-button:hover {
@@ -167,27 +165,89 @@
     cursor: not-allowed;
 }
 
+.icons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+img {
+    width: 20px;
+    height: 20px;
+}
+
+.edit-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.edit-area {
+    width: 100%;
+}
+
 /* Animation for loading text */
 @keyframes blink {
-    50% { opacity: 0; }
+    50% {
+        opacity: 0;
+    }
+}
+
+/* Show.css */
+
+/* ... (existing styles remain unchanged) ... */
+
+/* Popup Message Styling */
+.popup-message {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: red;
+    font-weight: bolder;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1em;
+    z-index: 1000;
+    animation: fadeInOut 2s ease-in-out;
+}
+
+/* Fade in and out animation */
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
 }
 
 /* Media Queries for Responsiveness */
 
-/* Mobile devices (max-width: 576px) */
+/* Mobile Devices (max-width: 576px) */
 @media (max-width: 576px) {
     .main {
         padding: 10px;
+        background-size:cover; /* Ensure background image fits within viewport */
     }
 
     .show-container {
-        width: 90%;
-        height: 80%;
+        width: 100%;
+        height: 500px;
         padding: 10px;
     }
 
     .show-title {
-        font-size: 1.5em;
+        font-size: 1.2em; /* Smaller font size */
         margin: 10px auto;
         padding: 8px;
         width: calc(100% - 20px);
@@ -197,32 +257,48 @@
         margin-top: 60px;
         margin-bottom: 10px;
         padding: 5px 0;
+        max-height: 300px; /* Limit height and enable scrolling */
+        overflow-y: auto;
     }
 
     .show-data-list {
-        height: 200px;
+        height: auto;
+        max-height: 250px; /* Enable scrolling for long lists */
         max-width: 100%;
     }
 
     .show-data-item {
         padding: 8px;
         font-weight: 600;
+        font-size: 0.9em; /* Slightly smaller font */
     }
 
     .show-input-area {
-        width: calc(100% - 20px);
+        width: 100%; /* Full width */
         padding: 10px;
-        margin-bottom: 10px;
-        margin-left: 5px;
+        margin-bottom: 0px;
+        margin-left: 0; /* Remove left margin */
     }
 
     .show-textarea {
         padding: 8px;
         font-size: 0.9em;
+        width: 100%;
     }
 
     .show-append-button {
         padding: 8px 16px;
+        font-size: 0.9em;
+        width: 100%;
+    }
+
+    .icons img {
+        width: 25px; /* Larger icons for touch */
+        height: 25px;
+    }
+
+    .edit-buttons button {
+        padding: 8px 16px; /* Larger buttons for touch */
         font-size: 0.9em;
     }
 
@@ -234,20 +310,20 @@
     }
 }
 
-/* Tablet devices (min-width: 577px and max-width: 992px) */
+/* Tablet Devices (min-width: 577px and max-width: 992px) */
 @media (min-width: 577px) and (max-width: 992px) {
     .main {
         padding: 15px;
     }
 
     .show-container {
-        width: 80%;
-        height: 75%;
+        width: 90%;
+        height: 520px;
         padding: 15px;
     }
 
     .show-title {
-        font-size: 1.8em;
+        font-size: 1.5em;
         margin: 15px auto;
         padding: 10px;
         width: calc(100% - 30px);
@@ -257,23 +333,29 @@
         margin-top: 70px;
         margin-bottom: 15px;
         padding: 8px 0;
+        height: 400px; /* More space for tablets */
+      
+        overflow-y: auto;
     }
 
     .show-data-list {
-        height: 230px;
-        max-width: 500px;
+        height: auto;
+        max-height: 350px; /* Larger max height */
+        max-width: 600px;
     }
 
     .show-data-item {
         padding: 10px;
         font-weight: 700;
+        font-size: 1em;
     }
 
     .show-input-area {
         width: calc(100% - 30px);
         padding: 15px;
-        margin-bottom: 15px;
-        margin-left: 15px;
+        margin-bottom: 0px;
+        margin-left: auto;
+        margin-right: auto;
     }
 
     .show-textarea {
@@ -286,6 +368,16 @@
         font-size: 1em;
     }
 
+    .icons img {
+        width: 22px; /* Slightly larger icons */
+        height: 22px;
+    }
+
+    .edit-buttons button {
+        padding: 9px 18px;
+        font-size: 1em;
+    }
+
     .show-error,
     .show-loading,
     .show-no-data {
@@ -294,16 +386,18 @@
     }
 }
 
-/* Laptop and larger screens (min-width: 993px) */
+/* Laptop and Larger Screens (min-width: 993px) */
 @media (min-width: 993px) {
     .main {
         padding: 0;
     }
 
     .show-container {
-        width: 60%;
-        height: 70%;
+        width: 75%;
+        height: 600px;
         padding: 20px;
+        max-width: 800px; /* Prevent stretching on large screens */
+        margin: 0 auto; /* Center the container */
     }
 
     .show-title {
@@ -317,22 +411,31 @@
         margin-top: 80px;
         margin-bottom: 20px;
         padding: 10px 0;
+        max-height: 600px; /* Allow scrolling if needed */
+        overflow-y: auto;
     }
 
     .show-data-list {
-        height: 250px;
-        max-width: 600px;
+        height: auto;
+        max-height: 350px;
+        max-width: 750px;
+        margin: 0 auto; /* Center the list */
     }
 
     .show-data-item {
         padding: 10px;
         font-weight: 700;
+        font-size: 1em;
     }
 
     .show-input-area {
         width: calc(100% - 40px);
         padding: 20px;
-        margin-bottom: 20px;
+        margin-bottom: 0px;
+        height: 150px;
+        max-width: 750px;
+        margin-left: auto;
+        margin-right: auto;
     }
 
     .show-textarea {
@@ -341,6 +444,16 @@
     }
 
     .show-append-button {
+        padding: 10px 20px;
+        font-size: 1em;
+    }
+
+    .icons img {
+        width: 20px;
+        height: 20px;
+    }
+
+    .edit-buttons button {
         padding: 10px 20px;
         font-size: 1em;
     }

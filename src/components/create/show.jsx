@@ -11,9 +11,15 @@ export function Show() {
     const [newData, setNewData] = useState("");
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [editingIndex, setEditingIndex] = useState(null);
+    const [editedValue, setEditedValue] = useState("");
+    const [message, setMessage] = useState(""); // Popup message text
+    const [showMessage, setShowMessage] = useState(false); // Popup visibility
 
-    const fetchData = async () => {
-        setIsLoading(true);
+    const fetchData = async (setLoading = true) => {
+        if (setLoading) {
+            setIsLoading(true);
+        }
         try {
             const res = await axios.post(api + "/Get", { code });
             console.log('API Response:', res.data);
@@ -23,17 +29,29 @@ export function Show() {
             setError('Failed to fetch data');
             setData([]);
         } finally {
-            setIsLoading(false);
+            if (setLoading) {
+                setIsLoading(false);
+            }
         }
     };
 
     useEffect(() => {
-        fetchData();
+        fetchData(true);
     }, [code]);
+
+    // Function to show popup message
+    const displayMessage = (msg) => {
+        setMessage(msg);
+        setShowMessage(true);
+        setTimeout(() => {
+            setShowMessage(false);
+            setMessage("");
+        }, 2000); // Hide after 2 seconds
+    };
 
     const appendData = async () => {
         if (!newData.trim()) {
-            alert('Please enter some data to append');
+            displayMessage('Please enter some data to append');
             return;
         }
 
@@ -41,13 +59,57 @@ export function Show() {
         setData(updatedData);
 
         try {
-            const res = await axios.post(api + "/Update", { code, data: updatedData });
-            alert(res.data.message);
+            await axios.post(api + "/Update", { code, data: updatedData });
             setNewData("");
+            displayMessage('Data appended successfully');
         } catch (e) {
             console.log(e);
             setError('Failed to update data');
             setData(data);
+            displayMessage('Failed to append data');
+        }
+    };
+
+    const deleteItem = async (index) => {
+        const originalData = [...data];
+        const updatedData = data.filter((_, i) => i !== index);
+        setData(updatedData);
+
+        try {
+            await axios.post(api + "/Update", { code, data: updatedData });
+            fetchData(false);
+            displayMessage('Item deleted successfully');
+        } catch (e) {
+            console.log(e);
+            setError('Failed to update data');
+            setData(originalData);
+            displayMessage('Failed to delete item');
+        }
+    };
+
+    const startEditing = (index) => {
+        setEditingIndex(index);
+        setEditedValue(data[index]);
+    };
+
+    const saveEdit = async () => {
+        if (editingIndex === null) return;
+
+        const originalData = [...data];
+        const updatedData = [...data];
+        updatedData[editingIndex] = editedValue;
+        setData(updatedData);
+
+        try {
+            await axios.post(api + "/Update", { code, data: updatedData });
+            setEditingIndex(null);
+            setEditedValue("");
+            displayMessage('Item edited successfully');
+        } catch (e) {
+            console.log(e);
+            setError('Failed to update data');
+            setData(originalData);
+            displayMessage('Failed to edit item');
         }
     };
 
@@ -61,11 +123,56 @@ export function Show() {
                         <p className="show-loading">Loading...</p>
                     ) : data.length > 0 ? (
                         <ul className="show-data-list">
-                            {data.map((item, index) => (
-                                <li className="show-data-item" key={index}>
-                                    <pre>{item}</pre>
-                                </li>
-                            ))}
+                            {[...data].reverse().map((item, reversedIndex) => {
+                                const originalIndex = data.length - 1 - reversedIndex;
+                                return (
+                                    <li className="show-data-item" key={originalIndex}>
+                                        {editingIndex === originalIndex ? (
+                                            <div className="edit-area">
+                                                <textarea
+                                                    value={editedValue}
+                                                    onChange={(e) => setEditedValue(e.target.value)}
+                                                    rows={4}
+                                                    cols={50}
+                                                    style={{ width: '100%' }}
+                                                />
+                                                <div className="edit-buttons">
+                                                    <button onClick={saveEdit}>Save</button>
+                                                    <button onClick={() => setEditingIndex(null)}>Cancel</button>
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <pre>{item}</pre>
+                                        )}
+                                        <div className="icons">
+                                            {editingIndex !== originalIndex && (
+                                                <>
+                                                    <img
+                                                        src="copy.png"
+                                                        alt="copy"
+                                                        onClick={() =>
+                                                            navigator.clipboard
+                                                                .writeText(item)
+                                                                .then(() => displayMessage('Copied to clipboard'))
+                                                                .catch(() => displayMessage('Failed to copy'))
+                                                        }
+                                                    />
+                                                    <img
+                                                        src="edit.png"
+                                                        alt="edit"
+                                                        onClick={() => startEditing(originalIndex)}
+                                                    />
+                                                    <img
+                                                        src="delete.png"
+                                                        alt="delete"
+                                                        onClick={() => deleteItem(originalIndex)}
+                                                    />
+                                                </>
+                                            )}
+                                        </div>
+                                    </li>
+                                );
+                            })}
                         </ul>
                     ) : (
                         <p className="show-no-data">No data available</p>
@@ -84,6 +191,12 @@ export function Show() {
                         Append
                     </button>
                 </div>
+                {/* Popup Message */}
+                {showMessage && (
+                    <div className="popup-message">
+                        {message}
+                    </div>
+                )}
             </div>
         </div>
     );
