@@ -17,6 +17,31 @@
     align-items: center;
 }
 
+h1 {
+    display: flex;
+}
+
+h1 > button {
+    margin-left: 10px;
+    padding: 5px 5px;
+    background-color: red;
+    height: 35px;
+    width: 70px;
+    color: #000;
+    font-weight: bolder;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Courier New', Courier, monospace;
+    transition: background-color 0.3s, color 0.3s, transform 0.3s;
+}
+
+h1 > button:hover {
+    background-color: darkred !important;
+    color: #000;
+    font-weight: bolder;
+}
+
 .show-container {
     background-color: skyblue;
     background-size: cover;
@@ -214,6 +239,56 @@ img {
     z-index: 1000;
     animation: fadeInOut 2s ease-in-out;
 }
+
+.popup-confirm {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 2000;
+    text-align: center;
+}
+.confirm-buttons {
+    margin-top: 10px;
+}
+.confirm-buttons button {
+    margin: 0 10px;
+    padding: 5px 15px;
+    cursor: pointer;
+    font-weight: bolder;
+}
+
+.yesButton{
+    background-color: red;
+}
+
+.noButton{
+    background-color: greenyellow;
+}
+
+.yesButton:hover {
+    background-color: darkred !important;
+}
+
+.noButton:hover {
+    background-color: green;
+}
+
+/* .popup-message {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    z-index: 1000;
+} */
 
 /* Fade in and out animation */
 @keyframes fadeInOut {

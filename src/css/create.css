@@ -18,6 +18,23 @@
     box-sizing: border-box;
 }
 
+.popup-message {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: red;
+    font-weight: bolder;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1em;
+    z-index: 1000;
+    animation: fadeInOut 2s ease-in-out;
+}
+
+
 /* Style the heading */
 h2 {
     color: #f3fcf3;

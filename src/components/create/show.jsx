@@ -1,6 +1,6 @@
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { api } from '../api';
 import '../../css/show.css';
 
@@ -15,11 +15,11 @@ export function Show() {
     const [editedValue, setEditedValue] = useState("");
     const [message, setMessage] = useState(""); // Popup message text
     const [showMessage, setShowMessage] = useState(false); // Popup visibility
+    const [showConfirm, setShowConfirm] = useState(false); // Confirmation popup visibility
+    const timeoutRef = useRef(null); // For managing displayMessage timeouts
 
     const fetchData = async (setLoading = true) => {
-        if (setLoading) {
-            setIsLoading(true);
-        }
+        if (setLoading) setIsLoading(true);
         try {
             const res = await axios.post(api + "/Get", { code });
             console.log('API Response:', res.data);
@@ -29,9 +29,7 @@ export function Show() {
             setError('Failed to fetch data');
             setData([]);
         } finally {
-            if (setLoading) {
-                setIsLoading(false);
-            }
+            if (setLoading) setIsLoading(false);
         }
     };
 
@@ -40,12 +38,17 @@ export function Show() {
     }, [code]);
 
     // Function to show popup message
-    const displayMessage = (msg) => {
+    const displayMessage = (msg, callback = null) => {
+        if (timeoutRef.current) clearTimeout(timeoutRef.current);
+
         setMessage(msg);
         setShowMessage(true);
-        setTimeout(() => {
+
+        timeoutRef.current = setTimeout(() => {
             setShowMessage(false);
             setMessage("");
+            timeoutRef.current = null;
+            if (callback) callback();
         }, 2000); // Hide after 2 seconds
     };
 
@@ -113,10 +116,34 @@ export function Show() {
         }
     };
 
+    const discard = (code) => {
+        setShowConfirm(true); // Show the confirmation popup
+    };
+
+    const handleConfirmDiscard = async () => {
+        setShowConfirm(false); // Hide confirmation popup
+        try {
+            await axios.post(api + "/Delete", { code });
+            displayMessage('Space discarded successfully', () => {
+                window.location.href = '/create';
+            });
+        } catch (e) {
+            console.log(e);
+            setError('Failed to discard space');
+            displayMessage('Failed to discard space');
+        }
+    };
+
+    const handleCancelDiscard = () => {
+        setShowConfirm(false); // Simply hide the confirmation popup
+    };
+
     return (
         <div className="main">
             <div className="show-container">
-                <h1 className="show-title">Code of the Space: {code}</h1>
+                <h1 className="show-title">
+                    Code of the Space: {code} <button onClick={() => discard(code)}>Discard</button>
+                </h1>
                 <div className="show-data-container">
                     {error && <p className="show-error">{error}</p>}
                     {isLoading ? (
@@ -193,8 +220,18 @@ export function Show() {
                 </div>
                 {/* Popup Message */}
                 {showMessage && (
-                    <div className="popup-message">
+                    <div className="popup-message" role="alert" aria-live="polite">
                         {message}
+                    </div>
+                )}
+                {/* Confirmation Popup */}
+                {showConfirm && (
+                    <div className="popup-confirm">
+                        <p>Are you sure you want to discard this space? This action cannot be undone.</p>
+                        <div className="confirm-buttons">
+                            <button onClick={handleConfirmDiscard} className='yesButton'>Yes</button>
+                            <button onClick={handleCancelDiscard} className='noButton'>No</button>
+                        </div>
                     </div>
                 )}
             </div>
